@@ -1,11 +1,14 @@
-// Create Audio objects
-var audioTrack = new AudioTrack('sound-effects');
+
+var supportsMultiTrack = !navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
+
+// Create MultiTrack Mixer
+var audioMixer = new AudioMixer('sound-effects');
 
 // Create AudioClip
 var audioClips = {
 	jump: new AudioClip({
 		startTime: 0,
-		endTime: 0.8
+		endTime: 1
 	}),
 
 	swish: new AudioClip({
@@ -55,8 +58,10 @@ var audioClips = {
 		startTime: 13.5,
 		endTime: 17.5
 	})
-
 };
+
+// Create Audio objects
+// var audioTrack = new AudioTrack('sound-effects');
 
 // Bind Button Clicks
 var buttons = {

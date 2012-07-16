@@ -2,6 +2,7 @@ var AudioTrack = function(name) {
 	this.createAudioElement(name);
 	this.setProperties();
 	this.loadAudio();
+	console.log('constructor')
 };
 
 AudioTrack.prototype = {
@@ -33,29 +34,41 @@ AudioTrack.prototype = {
 		this.timer;
 	},
 
-	loadAudio: function(){
+	loadAudio: function() {
+		console.log('load audio')
 		var audioTrack = this;
+		var audio = audioTrack.audio;
 		var click = document.ontouchstart === undefined ? 'click' : 'touchstart';
 
 		var userInitiatedPlayback = function(){
 			document.documentElement.removeEventListener(click, userInitiatedPlayback, true);
-			if(audioTrack.audio.readyState < 1) {
-				audioTrack.audio.play();
+			if(audio.readyState < 1) {
+				console.log('userInitiatedPlayback')
+				audio.play();
 			} else {
 				// If the audio is already ready, no user init is needed, and we can cancel this logic
-				audioTrack.audio.removeEventListener('play', preventPlayback, false);
-				audioTrack.audio.muted = false;
+				audio.removeEventListener('play', preventPlayback, false);
+				audio.muted = false;
 		}
 		};
 
 		var preventPlayback = function () {
-		audioTrack.audio.pause();
-			audioTrack.audio.muted = false;
-			audioTrack.audio.removeEventListener('play', preventPlayback, false);
+			console.log('preventPlayback, init complete')
+			audio.pause();
+			audio.muted = false;
+			audio.removeEventListener('play', preventPlayback, false);
 		};
 
-		audioTrack.audio.muted = true;
-		audioTrack.audio.addEventListener('play', preventPlayback, false);
+		var readyToSeek = function() {
+			console.log('progress');
+			audio.currentTime = 0.5;
+			audioTrack.initComplete = true;
+			audio.removeEventListener('progress', readyToSeek, false);
+		};
+
+		audio.muted = true;
+		audio.addEventListener('play', preventPlayback, false);
+		audio.addEventListener('progress', readyToSeek, false);
 		document.documentElement.addEventListener(click, userInitiatedPlayback, true);
 	},
 
@@ -63,13 +76,17 @@ AudioTrack.prototype = {
 		var audioTrack = this;
 		var audio = this.audio;
 
-		if(audioClip){
-			audioTrack.safePlay(audioClip);
-			audioClip.pauseTime = false;
-			clearInterval(audioTrack.timer);
-			audioTrack.monitorCurrentTime(audioClip);
-		} else  {
-			audioTrack.safePlay();
+		if(audioTrack.initComplete){
+			console.log('play audio clip')
+
+			if(audioClip){
+				audioTrack.safePlay(audioClip);
+				audioClip.pauseTime = false;
+				clearInterval(audioTrack.timer);
+				audioTrack.monitorCurrentTime(audioClip);
+			} else  {
+				audioTrack.safePlay();
+			}
 		}
 	},
 
