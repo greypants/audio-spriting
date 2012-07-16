@@ -3,19 +3,9 @@ var audioTrack = new AudioTrack('sound-effects');
 
 // Create AudioClip
 var audioClips = {
-	button: new AudioClip({
-		startTime: 3,
-		endTime: 3.6
-	}),
-
 	jump: new AudioClip({
 		startTime: 0,
 		endTime: 0.8
-	}),
-
-	medal: new AudioClip({
-		startTime: 1.5,
-		endTime: 2.418
 	}),
 
 	swish: new AudioClip({
@@ -23,13 +13,49 @@ var audioClips = {
 		endTime: 1.5
 	}),
 
-	points: new AudioClip({
+	medal: new AudioClip({
+		startTime: 1.7,
+		endTime: 2.618
+	}),
+
+	button: new AudioClip({
+		startTime: 3,
+		endTime: 3.6
+	}),
+
+	pause: new AudioClip({
 		startTime: 4,
-		endTime: 5,
+		endTime: 5.071
+	}),
+
+	points: new AudioClip({
+		startTime: 5.5,
+		endTime: 6.5,
 		loops: true,
-		loopStartTime: 4.2,
-		loopEndTime: 4.3
+		loopStartTime: 5.6,
+		loopEndTime: 6.3
+	}),
+
+	trip: new AudioClip({
+		startTime: 7,
+		endTime: 7.5
+	}),
+
+	die: new AudioClip({
+		startTime: 8,
+		endTime: 8.5
+	}),
+
+	countDown: new AudioClip({
+		startTime: 9,
+		endTime: 13.2
+	}),
+
+	gameOver: new AudioClip({
+		startTime: 13.5,
+		endTime: 17.5
 	})
+
 };
 
 // Bind Button Clicks
