@@ -18,51 +18,14 @@ AudioClip.prototype = {
 	},
 
 	play: function() {
-		var audioClip = this;
-		var onComplete = audioClip.loops ? audioClip.loop : audioClip.pause;
-
-		this.audioTrack.audio.currentTime = this.startTime;
-		this.audioTrack.play();
-
-		// clear any stop monitoring that was in place already
-		clearInterval(audioClip.audioTrack.timer);
-		audioClip.audioTrack.timer = setInterval(function () {
-			if (audioClip.audioTrack.audio.currentTime >= audioClip.endTime) {
-				clearInterval(audioClip.audioTrack.timer);
-				onComplete.call(audioClip);
-			}
-		}, 10);
-	},
-
-	loop: function() {
-		var audioClip = this;
-		audioClip.audioTrack.audio.pause();
-		audioClip.audioTrack.audio.currentTime = audioClip.loopStartTime;
-		audioClip.audioTrack.audio.play();
-
-		audioClip.audioTrack.timer = setInterval(function () {
-			if (audioClip.audioTrack.audio.currentTime >= audioClip.loopEndTime) {
-				clearInterval(audioClip.audioTrack.timer);
-				audioClip.loop();
-			}
-		}, 10);
-	},
-
-	stop: function() {
-		clearInterval(this.audioTrack.timer);
-		this.audioTrack.stop();
+		this.audioTrack.play(this);
 	},
 
 	pause: function() {
-		clearInterval(this.audioTrack.timer);
-		this.audioTrack.pause();
-		this.pausedTime = this.audioTrack.audio.currentTime;
+		this.audioTrack.pause(this);
 	},
 
 	resume: function() {
-		var remainingTime = this.pausedTime - this.loopEndTime;
-		var audioClip = this;
-		this.audioTrack.resume();
-		clearInterval(this.audioTrack.timer);
+		this.audioTrack.resume(this);
 	}
 };

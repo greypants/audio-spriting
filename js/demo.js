@@ -65,7 +65,8 @@ var buttons = {
 	medal: document.getElementById('medal'),
 	swish: document.getElementById('swish'),
 	points: document.getElementById('points'),
-	pointsStop: document.getElementById('points-stop')
+	pointsPause: document.getElementById('points-pause'),
+	pointsResume: document.getElementById('points-resume')
 };
 
 var touch = document.ontouchstart === undefined ? 'click' : 'touchstart';
@@ -90,6 +91,10 @@ buttons.points.addEventListener(touch, function(){
 	audioClips.points.play();
 }, false);
 
-buttons.pointsStop.addEventListener(touch, function(){
-	audioClips.points.stop();
+buttons.pointsPause.addEventListener(touch, function(){
+	audioClips.points.pause();
+}, false);
+
+buttons.pointsResume.addEventListener(touch, function(){
+	audioClips.points.resume();
 }, false);
