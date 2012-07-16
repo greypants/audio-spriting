@@ -37,31 +37,8 @@ var audioClips = {
 		loops: true,
 		loopStartTime: 5.6,
 		loopEndTime: 6.3
-	}),
-
-	trip: new AudioClip({
-		startTime: 7,
-		endTime: 7.5
-	}),
-
-	die: new AudioClip({
-		startTime: 8,
-		endTime: 8.5
-	}),
-
-	countDown: new AudioClip({
-		startTime: 9,
-		endTime: 13.2
-	}),
-
-	gameOver: new AudioClip({
-		startTime: 13.5,
-		endTime: 17.5
 	})
 };
-
-// Create Audio objects
-// var audioTrack = new AudioTrack('sound-effects');
 
 // Bind Button Clicks
 var buttons = {
