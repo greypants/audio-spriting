@@ -1,6 +1,4 @@
 
-var supportsMultiTrack = !navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
-
 // Create MultiTrack Mixer
 var audioMixer = new AudioMixer('sound-effects');
 
