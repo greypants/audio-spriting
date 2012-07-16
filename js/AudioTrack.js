@@ -27,7 +27,7 @@ AudioTrack.prototype = {
 	},
 
 	setProperties: function() {
-		this.audio.preload = 'auto';
+		this.audio.preload = true;
 		this.audio.autobuffer = true;
 		this.timer;
 	},
@@ -39,7 +39,13 @@ AudioTrack.prototype = {
 
 		var userInitiatedPlayback = function(){
 			document.documentElement.removeEventListener(click, userInitiatedPlayback, true);
-			audioTrack.audio.play();
+			if(audioTrack.audio.readyState < 1) {
+				audioTrack.audio.play();
+			} else {
+				// If the audio is already ready, no user init is needed, and we can cancel this logic
+				audioTrack.audio.removeEventListener('play', preventPlayback, false);
+				audioTrack.audio.muted = false;
+			}
 		};
 
 		var preventPlayback = function () {
@@ -48,8 +54,7 @@ AudioTrack.prototype = {
 			audioTrack.audio.removeEventListener('play', preventPlayback, false);
 		};
 
-		audioTrack.audio.load();
-		audioTrack.audio.muted = true; // makes no difference on iOS :(
+		audioTrack.audio.muted = true;
 		audioTrack.audio.addEventListener('play', preventPlayback, false);
 		document.documentElement.addEventListener(click, userInitiatedPlayback, true);
 	},

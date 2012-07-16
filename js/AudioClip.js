@@ -4,60 +4,57 @@ AudioClip = function(properties){
 
 AudioClip.prototype = {
 	setProperties: function(properties) {
-
-		this.audioTrack = properties.audioTrack || audioTracks.sfx;
+		// Set a default source sprite file here, or specify one on object creation
+		this.audioTrack = properties.audioTrack || audioTrack;
 		this.startTime = properties.startTime || 0;
 		this.endTime = properties.endTime || this.startTime + 1;
-		this.clipLength = this.endTime - this.startTime;
 		this.pausedTime = this.startTime;
 		this.timer = false;
 
 		// Looping (optional)
-		this.loops = this.loops || false;
-		if(this.loops) {
-			this.loopStartTime = this.loopStartTime || this.startTime;
-			this.loopEndTime = this.loopEndTime || this.endTime;
-			this.loopLength = this.loopEndTime - this.loopStartTime;
-		}
+		this.loops = properties.loops || false;
+		this.loopStartTime = properties.loopStartTime || this.startTime;
+		this.loopEndTime = properties.loopEndTime || this.endTime;
 	},
 
 	play: function() {
 		var audioClip = this;
-		var onComplete = audioClip.loops ? audioClip.loop : stop;
+		var onComplete = audioClip.loops ? audioClip.loop : audioClip.pause;
 
 		this.audioTrack.audio.currentTime = this.startTime;
 		this.audioTrack.play();
 
 		// clear any stop monitoring that was in place already
 		clearInterval(audioClip.audioTrack.timer);
-
 		audioClip.audioTrack.timer = setInterval(function () {
 			if (audioClip.audioTrack.audio.currentTime >= audioClip.endTime) {
-				audioClip.audioTrack.pause();
 				clearInterval(audioClip.audioTrack.timer);
-				console.log('PAUSE!');
+				onComplete.call(audioClip);
 			}
 		}, 10);
 	},
 
 	loop: function() {
 		var audioClip = this;
-		this.audioTrack.audio.currentTime = this.loopTime;
-		this.audioTrack.play();
+		audioClip.audioTrack.audio.pause();
+		audioClip.audioTrack.audio.currentTime = audioClip.loopStartTime;
+		audioClip.audioTrack.audio.play();
 
-		clearTimeout(this.timer);
-		this.timer = setTimeout(function(){
-			audioClip.loop();
-		}, this.clipLength * 1000);
+		audioClip.audioTrack.timer = setInterval(function () {
+			if (audioClip.audioTrack.audio.currentTime >= audioClip.loopEndTime) {
+				clearInterval(audioClip.audioTrack.timer);
+				audioClip.loop();
+			}
+		}, 10);
 	},
 
 	stop: function() {
-		console.log('stop?')
-		clearTimeout(this.audioTrack.timer);
+		clearInterval(this.audioTrack.timer);
 		this.audioTrack.stop();
 	},
 
 	pause: function() {
+		clearInterval(this.audioTrack.timer);
 		this.audioTrack.pause();
 		this.pausedTime = this.audioTrack.audio.currentTime;
 	},
@@ -66,7 +63,6 @@ AudioClip.prototype = {
 		var remainingTime = this.pausedTime - this.loopEndTime;
 		var audioClip = this;
 		this.audioTrack.resume();
-		clearTimeout(this.timer);
-		this.timer = setTimeout(function(){audioClip.stop();}, remainingTime);
+		clearInterval(this.audioTrack.timer);
 	}
 };
