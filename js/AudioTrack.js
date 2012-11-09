@@ -54,6 +54,7 @@ AudioTrack.prototype = {
 
 		var preventPlayback = function () {
 			console.log('preventPlayback, init complete')
+			audio.currentTime = 0.5;
 			audio.pause();
 			audio.muted = false;
 			audio.removeEventListener('play', preventPlayback, false);
@@ -61,7 +62,6 @@ AudioTrack.prototype = {
 
 		var readyToSeek = function() {
 			console.log('progress');
-			audio.currentTime = 0.5;
 			audioTrack.initComplete = true;
 			audio.removeEventListener('progress', readyToSeek, false);
 		};

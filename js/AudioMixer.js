@@ -7,7 +7,7 @@ AudioMixer.prototype = {
 	createTracks: function(name) {
 		var supportsMultiTrack = !navigator.userAgent.match(/(iPad|iPhone|iPod)/i);
 
-		this.maxTracks = supportsMultiTrack ? 5 : 1;
+		this.maxTracks = supportsMultiTrack ? 7 : 1;
 		var i = 0;
 
 		this.name = name + '-multiTrack';

@@ -6,12 +6,12 @@ var audioMixer = new AudioMixer('sound-effects');
 var audioClips = {
 	jump: new AudioClip({
 		startTime: 0,
-		endTime: 1
+		endTime: 0.6
 	}),
 
 	swish: new AudioClip({
 		startTime: 1,
-		endTime: 1.5
+		endTime: 1.25
 	}),
 
 	medal: new AudioClip({
